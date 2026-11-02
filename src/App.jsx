@@ -534,10 +534,10 @@ export default function App() {
             </a>
 
             <ul className="hidden lg:flex items-center gap-8">
-              {["Story", "Stack", "Experience", "Projects", "Contact"].map((item) => (
+              {["Home", "Stack", "Experience", "Projects", "Contact"].map((item) => (
                 <li key={item}>
                   <a
-                    href={`#${item.toLowerCase()}`}
+                    href={item === "Home" ? "#top" : `#${item.toLowerCase()}`}
                     className="relative text-[0.8125rem] font-medium uppercase tracking-[0.18em] opacity-70 hover:opacity-100 hover:text-accent transition-colors py-1 group"
                   >
                     {item}
