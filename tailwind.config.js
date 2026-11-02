@@ -23,8 +23,13 @@ export default {
       },
       animation: {
         marquee: "marquee 22s linear infinite",
+        "touch-ripple": "touchRipple 700ms ease-out forwards",
       },
       keyframes: {
+        touchRipple: {
+          "0%": { opacity: "0.8", transform: "translate(-50%, -50%) scale(1)" },
+          "100%": { opacity: "0", transform: "translate(-50%, -50%) scale(8)" },
+        },
         marquee: {
           "0%": { transform: "translateX(0%)" },
           "100%": { transform: "translateX(-50%)" },

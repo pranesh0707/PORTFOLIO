@@ -394,6 +394,68 @@ function ArcReactorMatrix({ mousePos, isDark }) {
   );
 }
 
+function InteractionGlow() {
+  const [pointer, setPointer] = useState({ x: 0, y: 0, visible: false });
+  const [ripples, setRipples] = useState([]);
+
+  useEffect(() => {
+    let lastRipple = 0;
+    let nextId = 0;
+
+    const addRipple = (x, y) => {
+      const now = Date.now();
+      if (now - lastRipple < 120) return;
+      lastRipple = now;
+      const id = nextId++;
+      setRipples((current) => [...current.slice(-5), { id, x, y }]);
+      window.setTimeout(() => {
+        setRipples((current) => current.filter((ripple) => ripple.id !== id));
+      }, 700);
+    };
+
+    const onPointerMove = (event) => {
+      setPointer({ x: event.clientX, y: event.clientY, visible: true });
+    };
+    const onPointerLeave = () => setPointer((current) => ({ ...current, visible: false }));
+    const onPointerDown = (event) => addRipple(event.clientX, event.clientY);
+    const onTouchMove = (event) => {
+      const touch = event.touches[0];
+      if (touch) addRipple(touch.clientX, touch.clientY);
+    };
+
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerleave", onPointerLeave);
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", onPointerLeave);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("touchmove", onTouchMove);
+    };
+  }, []);
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[60] overflow-hidden" aria-hidden="true">
+      <span
+        className={`absolute hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_16px_4px_rgba(255,255,255,0.7)] dark:block ${pointer.visible ? "opacity-80" : "opacity-0"}`}
+        style={{ left: pointer.x, top: pointer.y }}
+      />
+      <span
+        className={`absolute hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_16px_4px_rgba(255,59,29,0.7)] dark:hidden ${pointer.visible ? "opacity-80" : "opacity-0"}`}
+        style={{ left: pointer.x, top: pointer.y }}
+      />
+      {ripples.map((ripple) => (
+        <span
+          key={ripple.id}
+          className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 animate-touch-ripple rounded-full border-2 border-accent bg-transparent dark:border-white"
+          style={{ left: ripple.x, top: ripple.y }}
+        />
+      ))}
+    </div>
+  );
+}
+
 /* =========================================================================
    MAIN APP
 ========================================================================= */
@@ -415,6 +477,7 @@ export default function App() {
 
   return (
     <div className={isDark ? "dark" : ""}>
+      <InteractionGlow />
       <div
         className={`relative min-h-screen overflow-x-hidden font-sans antialiased transition-colors duration-300 ${
           isDark ? "bg-[#08080a] text-[#f3f1ea]" : "bg-white text-[#111114]"
@@ -667,7 +730,7 @@ export default function App() {
                 <div key={idx} className={`relative flex flex-col sm:flex-row gap-8 items-start ${idx % 2 === 1 ? "sm:flex-row-reverse" : ""}`}>
                   <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-white dark:bg-[#08080a] border-4 border-accent shadow-[0_0_15px_rgba(255,59,29,0.8)] z-20 flex items-center justify-center" />
                   <div className="ml-12 sm:ml-0 sm:w-1/2 sm:px-8">
-                    <div className="p-7 rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 hover:border-accent transition-all duration-300 shadow-xl space-y-4">
+                    <div className="p-7 rounded-3xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#151519] hover:border-accent transition-all duration-300 shadow-[0_18px_45px_rgba(15,23,42,0.08)] dark:shadow-[0_18px_45px_rgba(0,0,0,0.32)] space-y-4">
                       <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-zinc-800">
                         <span className="text-xs font-mono font-bold uppercase tracking-widest text-accent">{item.tag}</span>
                         <span className="text-xs font-mono opacity-60">{item.duration}</span>
@@ -709,7 +772,7 @@ export default function App() {
             {PROJECTS.map((proj, idx) => (
               <article
                 key={proj.name}
-                className={`group flex flex-col justify-between p-7 rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 hover:border-accent transition-all duration-500 shadow-xl ${
+                className={`group flex flex-col justify-between p-7 rounded-3xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#151519] hover:border-accent transition-all duration-500 shadow-[0_18px_45px_rgba(15,23,42,0.08)] dark:shadow-[0_18px_45px_rgba(0,0,0,0.32)] ${
                   idx % 2 === 1 ? "md:mt-16" : ""
                 }`}
               >
@@ -731,18 +794,18 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="mt-8 pt-5 border-t border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+                <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-5 dark:border-zinc-800">
                   <a
                     href={proj.githubUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs font-mono uppercase tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-colors"
+                    className="inline-flex min-h-10 items-center rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-mono uppercase tracking-widest text-[#111114] transition-colors hover:border-accent hover:text-accent dark:border-zinc-600 dark:bg-[#0d0d10] dark:text-[#f3f1ea]"
                   >
                     GitHub Repository ↗
                   </a>
                   <button
                     onClick={() => setSelectedProject(proj)}
-                    className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-accent hover:underline cursor-pointer group-hover:translate-x-1 duration-300"
+                    className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-accent bg-accent px-3.5 py-2 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-accent-2 cursor-pointer"
                   >
                     Deep Dive System ↗
                   </button>
@@ -767,10 +830,10 @@ export default function App() {
             Open to software engineering internships and high-performance backend roles in distributed systems, application security, and AI infrastructure.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-6">
+          <div className="mt-10 flex flex-col items-stretch gap-6 sm:flex-row sm:flex-wrap sm:items-center">
             <a
               href={PROFILE.email}
-              className="group inline-flex items-baseline gap-3 sm:gap-4 font-sans text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight transition-all duration-300 ease-out hover:translate-x-3.5 hover:text-accent break-all"
+              className="group inline-flex max-w-full items-baseline gap-3 break-all font-sans text-[clamp(1.35rem,7vw,3rem)] font-semibold tracking-tight transition-all duration-300 ease-out hover:translate-x-3.5 hover:text-accent sm:gap-4 lg:text-5xl"
             >
               {PROFILE.emailDisplay}
               <span className="text-accent inline-block transition-transform duration-300 group-hover:translate-x-2 group-hover:-translate-y-2">↗</span>
@@ -779,13 +842,13 @@ export default function App() {
             <a
               href={PROFILE.resumePdf}
               download="Pranesh_US_Resume.pdf"
-              className="py-3.5 px-7 rounded-full bg-accent text-white font-semibold text-xs uppercase tracking-widest hover:bg-accent-2 transition-colors shadow-xl active:scale-95"
+              className="inline-flex w-full justify-center rounded-full bg-accent px-7 py-3.5 text-xs font-semibold uppercase tracking-widest text-white shadow-xl transition-colors hover:bg-accent-2 active:scale-95 sm:w-auto"
             >
               Download Resume (PDF) ↓
             </a>
           </div>
 
-          <div className="mt-28 sm:mt-36 border-t border-slate-200 dark:border-zinc-800 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="mt-28 grid grid-cols-1 items-start gap-10 border-t border-slate-200 py-12 text-left dark:border-zinc-800 sm:mt-36 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-6">
               <p className="font-display text-3xl uppercase tracking-tight">{PROFILE.name}</p>
               <p className="mt-2 text-xs uppercase tracking-[0.22em] opacity-60 font-mono">
