@@ -243,7 +243,7 @@ const TIMELINE = [
 /* =========================================================================
   IMAGE AVATAR WITH 3D PARALLAX, DEPTH SHADOWS & MOUSE-TRACKING SHEEN
 ========================================================================= */
-function RealPixarAvatar({ mousePos, isDark, size = "w-[280px] h-[340px] sm:w-[400px] sm:h-[460px]" }) {
+function RealPixarAvatar({ mousePos, isDark, priority = false, size = "w-[280px] h-[340px] sm:w-[400px] sm:h-[460px]" }) {
 
   // Parallax angles
   const rotY = mousePos.x * 22;
@@ -261,6 +261,7 @@ function RealPixarAvatar({ mousePos, isDark, size = "w-[280px] h-[340px] sm:w-[4
       <img
         src="/avatar.png"
         alt="Pranesh U S - 3D Pixar Character"
+        fetchPriority={priority ? "high" : "auto"}
         className="w-full h-full object-contain filter drop-shadow-[0_25px_50px_rgba(255,59,29,0.5)]"
         style={{
           mixBlendMode: isDark ? "normal" : "darken",
@@ -499,7 +500,7 @@ export default function App() {
               </span>
             </header>
 
-            <main className="max-w-6xl mx-auto px-6 sm:px-12 py-12 lg:py-16">
+            <section className="max-w-6xl mx-auto px-6 sm:px-12 py-12 lg:py-16" aria-label={`${selectedProject.name} details`}>
               <div className="flex flex-col gap-8">
                 <div>
                   <span className="text-xs uppercase tracking-[0.24em] font-mono text-accent font-semibold">
@@ -575,7 +576,7 @@ export default function App() {
                   </a>
                 </div>
               </div>
-            </main>
+            </section>
           </div>
         )}
 
@@ -592,7 +593,7 @@ export default function App() {
               </div>
               <div className="flex flex-col">
                 <span className="text-xs font-bold uppercase tracking-[0.2em]">{PROFILE.name}</span>
-                <span className="text-[0.625rem] font-mono uppercase tracking-widest opacity-60">3rd Year CSBS · SKCET (8.21 CGPA)</span>
+                <span className="text-[0.625rem] font-mono uppercase tracking-widest text-slate-600 dark:text-[#f3f1ea]/60">3rd Year CSBS · SKCET (8.21 CGPA)</span>
               </div>
             </a>
 
@@ -601,7 +602,7 @@ export default function App() {
                 <li key={item}>
                   <a
                     href={item === "Home" ? "#top" : `#${item.toLowerCase()}`}
-                    className="relative text-[0.8125rem] font-medium uppercase tracking-[0.18em] opacity-70 hover:opacity-100 hover:text-accent transition-colors py-1 group"
+                    className="relative text-[0.8125rem] font-medium uppercase tracking-[0.18em] text-slate-700 dark:text-[#f3f1ea]/70 hover:text-accent transition-colors py-1 group"
                   >
                     {item}
                     <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full" />
@@ -633,6 +634,7 @@ export default function App() {
           </nav>
         </header>
 
+        <main id="main-content">
         {/* HERO SECTION: REGGIE PERRY JR. REFERENCE LAYOUT (RED NAME BEHIND, AVATAR IN FRONT) */}
         <section id="top" className="relative flex min-h-screen flex-col justify-between overflow-hidden px-6 pt-28 sm:px-12 sm:pt-36">
           <div className="relative z-30 flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
@@ -648,7 +650,7 @@ export default function App() {
               </h2>
             </div>
             <div className="flex flex-col items-start gap-3 sm:items-end">
-              <p className="max-w-md text-sm leading-relaxed opacity-75 sm:text-right sm:text-base">
+              <p className="max-w-md text-sm leading-relaxed text-slate-700 dark:text-[#f3f1ea]/75 sm:text-right sm:text-base">
                 {PROFILE.bio}
               </p>
             </div>
@@ -664,6 +666,7 @@ export default function App() {
               <RealPixarAvatar
                 mousePos={mousePos}
                 isDark={isDark}
+                priority
                 size="w-[280px] h-[360px] sm:w-[360px] sm:h-[460px]"
               />
             </div>
@@ -733,13 +736,13 @@ export default function App() {
                     <div className="p-7 rounded-3xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#151519] hover:border-accent transition-all duration-300 shadow-[0_18px_45px_rgba(15,23,42,0.08)] dark:shadow-[0_18px_45px_rgba(0,0,0,0.32)] space-y-4">
                       <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-zinc-800">
                         <span className="text-xs font-mono font-bold uppercase tracking-widest text-accent">{item.tag}</span>
-                        <span className="text-xs font-mono opacity-60">{item.duration}</span>
+                        <span className="text-xs font-mono text-slate-600 dark:text-[#f3f1ea]/60">{item.duration}</span>
                       </div>
                       <h3 className="text-xl font-bold font-sans">{item.role}</h3>
                       <h4 className="text-sm font-mono text-accent font-semibold">{item.company}</h4>
                       <ul className="space-y-2 pt-2">
                         {item.bullets.map((b, bIdx) => (
-                          <li key={bIdx} className="flex items-start gap-2.5 text-sm opacity-80 leading-relaxed">
+                          <li key={bIdx} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-[#f3f1ea]/80 leading-relaxed">
                             <span className="text-accent font-bold">›</span>
                             <span>{b}</span>
                           </li>
@@ -765,7 +768,7 @@ export default function App() {
                 Selected Systems.
               </h2>
             </div>
-            <span className="text-[0.8125rem] uppercase tracking-[0.22em] font-mono opacity-60">04 / Production Architectures</span>
+            <span className="text-[0.8125rem] uppercase tracking-[0.22em] font-mono text-slate-600 dark:text-[#f3f1ea]/60">04 / Production Architectures</span>
           </div>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
@@ -779,12 +782,12 @@ export default function App() {
                 <div>
                   <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-zinc-800">
                     <span className="text-xs uppercase tracking-widest font-mono text-accent font-bold">{proj.outcome}</span>
-                    <span className="text-xs uppercase tracking-widest font-mono opacity-60">{proj.year}</span>
+                    <span className="text-xs uppercase tracking-widest font-mono text-slate-600 dark:text-[#f3f1ea]/60">{proj.year}</span>
                   </div>
                   <h3 className="mt-6 font-display uppercase text-3xl sm:text-4xl tracking-tight group-hover:text-accent transition-colors">
                     {proj.name}
                   </h3>
-                  <p className="mt-3 text-sm opacity-80 leading-relaxed">{proj.summary}</p>
+                  <p className="mt-3 text-sm text-slate-700 dark:text-[#f3f1ea]/80 leading-relaxed">{proj.summary}</p>
                   <div className="mt-5 flex flex-wrap gap-2">
                     {proj.highlights.map((h) => (
                       <span key={h} className="px-3 py-1 text-[0.6875rem] font-mono font-semibold uppercase tracking-wider rounded-lg bg-[#111114] border border-[#111114] text-white">
@@ -814,6 +817,7 @@ export default function App() {
             ))}
           </div>
         </section>
+        </main>
 
         {/* FOOTER */}
         <footer id="contact" className="pt-24 sm:pt-36 px-6 sm:px-12 border-t border-slate-200 dark:border-zinc-800 z-10 relative bg-white dark:bg-zinc-950/80 backdrop-blur">
@@ -826,7 +830,7 @@ export default function App() {
             Ready to scale systems together?
           </h2>
 
-          <p className="mt-6 text-base sm:text-xl opacity-75 max-w-xl leading-relaxed">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-700 dark:text-[#f3f1ea]/75 sm:text-xl">
             Open to software engineering internships and high-performance backend roles in distributed systems, application security, and AI infrastructure.
           </p>
 
@@ -851,7 +855,7 @@ export default function App() {
           <div className="mt-28 grid grid-cols-1 items-start gap-10 border-t border-slate-200 py-12 text-left dark:border-zinc-800 sm:mt-36 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-6">
               <p className="font-display text-3xl uppercase tracking-tight">{PROFILE.name}</p>
-              <p className="mt-2 text-xs uppercase tracking-[0.22em] opacity-60 font-mono">
+              <p className="mt-2 text-xs uppercase tracking-[0.22em] text-slate-600 dark:text-[#f3f1ea]/60 font-mono">
                 B.Tech CSBS @ SKCET · Engineering with conviction & zero trust.
               </p>
             </div>
@@ -863,7 +867,7 @@ export default function App() {
                     href={PROFILE.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 text-sm opacity-70 hover:opacity-100 hover:text-accent transition-colors font-mono"
+                    className="group flex items-center gap-2 text-sm text-slate-700 dark:text-[#f3f1ea]/70 hover:text-accent transition-colors font-mono"
                   >
                     <span className="w-0 h-[1px] bg-accent transition-all duration-300 group-hover:w-4" />
                     GitHub: pranesh0707 ↗
@@ -874,18 +878,18 @@ export default function App() {
                     href={PROFILE.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 text-sm opacity-70 hover:opacity-100 hover:text-accent transition-colors font-mono"
+                    className="group flex items-center gap-2 text-sm text-slate-700 dark:text-[#f3f1ea]/70 hover:text-accent transition-colors font-mono"
                   >
                     <span className="w-0 h-[1px] bg-accent transition-all duration-300 group-hover:w-4" />
                     LinkedIn: pranesh-sekar ↗
                   </a>
                 </li>
-                <li className="text-sm opacity-70 font-mono pt-1">Tel: {PROFILE.phone}</li>
+                <li className="text-sm text-slate-700 dark:text-[#f3f1ea]/70 font-mono pt-1">Tel: {PROFILE.phone}</li>
               </ul>
             </div>
 
             <div className="lg:col-span-3 lg:text-right">
-              <p className="text-xs uppercase tracking-[0.18em] opacity-60 font-mono">
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-600 dark:text-[#f3f1ea]/60 font-mono">
                 © {new Date().getFullYear()} {PROFILE.name}. All rights reserved.
               </p>
             </div>
