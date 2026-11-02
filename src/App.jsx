@@ -583,7 +583,7 @@ export default function App() {
         {/* NAVIGATION */}
         <header className="fixed inset-x-0 top-0 z-40 pointer-events-none">
           <nav
-            className={`pointer-events-auto flex items-center justify-between px-6 sm:px-12 py-5 backdrop-blur-md border-b transition-colors ${
+            className={`pointer-events-auto flex items-center justify-between px-6 sm:px-12 py-5 text-[#111114] dark:text-[#f3f1ea] backdrop-blur-md border-b transition-colors ${
               isDark ? "bg-[#08080a]/80 border-white/10" : "bg-white/80 border-slate-200"
             }`}
           >
