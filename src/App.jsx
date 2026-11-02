@@ -437,7 +437,7 @@ function InteractionGlow() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[60] overflow-hidden" aria-hidden="true">
+    <div className="pointer-events-none fixed inset-0 z-[60] hidden overflow-hidden lg:block" aria-hidden="true">
       <span
         className={`absolute hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_16px_4px_rgba(255,255,255,0.7)] dark:block ${pointer.visible ? "opacity-80" : "opacity-0"}`}
         style={{ left: pointer.x, top: pointer.y }}
