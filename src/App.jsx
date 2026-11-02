@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 /* =========================================================================
    DEVELOPER PROFILE DATA — PRANESH U S
@@ -850,6 +851,7 @@ export default function App() {
           }
         }
       `}</style>
+      <SpeedInsights />
     </div>
   );
 }
