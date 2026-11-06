@@ -10,7 +10,7 @@ const PROFILE = {
   degree: "B.Tech in Computer Science and Business Systems (2024 – 2028)",
   cgpa: "8.21",
   roleLines: ["Distributed Systems", "Zero-Trust Security", "Cloud Scalability", "High Throughput"],
-  bio: "Third-year CSBS engineer at SKCET focused on building resilient backend architectures, zero-trust security layers, and asynchronous event streams. Interned at Infosys Springboard & Pinnacle Lab with hands-on deployments in Spring Boot, Kafka, Redis, and AWS.",
+  bio: "CSBS engineer at SKCET focused on resilient backend architectures, zero-trust security layers, and asynchronous event streams. Building production-grade systems with Java, Spring Boot, Kafka, Redis, PostgreSQL, and AWS.",
   phone: "+91 8098046759",
   email: "mailto:praneshsekar07@gmail.com",
   emailDisplay: "praneshsekar07@gmail.com",
@@ -68,6 +68,7 @@ const ICONS = {
   MySQL: () => <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" className="w-8 h-8 object-contain" />,
   Python: () => <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" className="w-8 h-8 object-contain" />,
   ReactIcon: () => <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" className="w-8 h-8 object-contain" />,
+  Git: () => <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" className="w-8 h-8 object-contain" />,
   Postman: () => (
     <svg viewBox="0 0 128 128" className="w-8 h-8">
       <circle cx="64" cy="64" r="60" fill="#FF6C37" />
@@ -101,6 +102,7 @@ const OUTER_ORBIT = [
   { name: "MySQL", role: "Optimized Query Latency", Icon: ICONS.MySQL },
   { name: "Python", role: "AST Parsing & ML Pipelines", Icon: ICONS.Python },
   { name: "React", role: "Frontend UI & Vite", Icon: ICONS.ReactIcon },
+  { name: "Git", role: "Version Control & Collaboration", Icon: ICONS.Git },
   { name: "Postman", role: "API Testing & Automation", Icon: ICONS.Postman },
   { name: "Swagger", role: "OpenAPI Documentation", Icon: ICONS.Swagger },
 ];
@@ -147,42 +149,22 @@ const PROJECTS = [
     }
   },
   {
-    id: "spring-ai-audio-transcriber",
-    name: "Audio Transcriber AI",
-    category: "Full-Stack Speech-to-Text",
-    year: "2025",
-    outcome: "Shipped · AI Pipeline",
-    githubUrl: "https://github.com/pranesh0707/SPRING_AI_AUDIO_TRANSCRIBER",
-    summary: "Full-stack speech-to-text platform enabling browser recording via native MediaRecorder API, streaming through Spring Boot gateway to a faster-whisper service with word-by-word reveal.",
-    tags: ["React Vite", "Spring Boot", "Python Flask", "faster-whisper", "MediaRecorder API"],
-    highlights: ["MediaRecorder API", "faster-whisper", "VAD Silence Filter", "Word-by-Word Reveal", "Zero External Libs"],
+    id: "instaauth",
+    name: "InstaAuth",
+    category: "Production Authentication Backend",
+    year: "2025 – 2026",
+    outcome: "Production-Grade Security",
+    githubUrl: "https://github.com/pranesh0707/InstaAuth",
+    summary: "Scalable authentication backend with JWT login, refresh-token rotation, Redis-backed token blacklisting, OTP email verification, and enterprise security controls.",
+    tags: ["Java 21", "Spring Boot 4", "Spring Security 7", "PostgreSQL", "Redis", "Bucket4j"],
+    highlights: ["JWT Rotation", "OTP Verification", "Rate Limiting", "Account Lockout", "Dockerized Stack", "Flyway Migrations"],
     deepDive: {
-      problem: "Standard browser transcription interfaces freeze on large audio uploads and lack real-time feedback, failing silently when audio codecs mismatch.",
-      solution: "Built a non-blocking audio pipeline pairing native browser MediaRecorder chunks with a Spring Boot RestTemplate proxy and Python Flask faster-whisper backend tuned with VAD filtering.",
+      problem: "Production authentication systems must prevent token reuse, brute-force attacks, and insecure recovery flows while remaining deployable across environments.",
+      solution: "Built a Spring Security authentication backend with refresh-token rotation, Redis-backed token blacklisting, OTP verification, rate limiting, account lockout, and secure password reset flows.",
       architecture: [
-        "Native browser MediaRecorder recording audio without heavy external client libraries.",
-        "Transcription tuning: beam search decoding, deterministic temperature, and VAD silence filtering.",
-        "Word-by-word staggered reveal animation with multi-language hint support (English, Hindi, Spanish)."
-      ],
-    }
-  },
-  {
-    id: "med-vault",
-    name: "MedVault & AuthForge",
-    category: "Application Security & RBAC",
-    year: "2026",
-    outcome: "Infosys Springboard Deployed",
-    githubUrl: "https://github.com/pranesh0707/MED_VAULT",
-    summary: "Fortified healthcare data platform with dual-layer security, Spring Security JWT access/refresh token rotation, blacklist-based logout, and normalized schema querying.",
-    tags: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL", "PostgreSQL", "RBAC"],
-    highlights: ["JWT Token Blacklist", "90% Vulnerability Drop", "Normalized Schemas", "30% Lower Latency", "RBAC Isolation"],
-    deepDive: {
-      problem: "Healthcare platforms face strict regulatory vulnerability mandates: stale access tokens and unindexed schemas leak sensitive patient data during concurrent queries.",
-      solution: "Engineered AuthForge: a reusable Spring Security authentication framework featuring JWT refresh-token rotation, an in-memory token blacklist for immediate revocation, and normalized MySQL schemas.",
-      architecture: [
-        "Blacklist-based logout interceptor reducing unauthorized token reuse by 90%.",
-        "Normalized MySQL schema cutting query response latency by 30% across 10,000+ patient records.",
-        "Role-Based Access Control (RBAC) isolating Doctor, Patient, and Admin security boundaries."
+        "Redis-backed token blacklist and refresh-token rotation for immediate revocation and session safety.",
+        "Bucket4j per-IP rate limiting and automated account lockout to protect login and recovery endpoints.",
+        "Dockerized PostgreSQL, Redis, and MailHog stack with Flyway migrations for environment parity."
       ],
     }
   }
@@ -203,14 +185,13 @@ const TIMELINE = [
   },
   {
     type: "WORK",
-    role: "Java Development Intern",
-    company: "Pinnacle Lab (Remote)",
-    duration: "Jun 2025 – Aug 2025",
-    tag: "Backend & Automation",
+    role: "Independent Software Developer",
+    company: "Self-Initiated Engineering Projects",
+    duration: "Jun 2025 – Present",
+    tag: "Distributed Systems",
     bullets: [
-      "Architected Flight Booking and Library Management systems utilizing Java OOP principles, improving code reusability by 40%.",
-      "Deployed SeedCart, a Spring Boot backend automating dynamic database seeding for 50+ test scenarios, cutting setup time by 60%.",
-      "Optimized REST API endpoints ensuring scalable data handling for high-traffic modules."
+      "Architected and deployed three production-grade distributed systems focused on AI governance, distributed state debugging, and zero-trust authentication.",
+      "Used Java 21, Spring Boot 4, Apache Kafka, Redis, and PostgreSQL to build scalable, enterprise-ready backend architectures.",
     ]
   },
   {
@@ -624,7 +605,7 @@ export default function App() {
 
               <a
                 href={PROFILE.resumePdf}
-                download="Pranesh_US_Resume.pdf"
+                download="Pranesh_U_S_Resume.pdf"
                 className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent bg-accent/10 hover:bg-accent text-accent hover:text-white text-xs font-semibold uppercase tracking-widest transition-all duration-300 active:scale-95"
               >
                 Resume PDF ↓
@@ -845,7 +826,7 @@ export default function App() {
 
             <a
               href={PROFILE.resumePdf}
-              download="Pranesh_US_Resume.pdf"
+              download="Pranesh_U_S_Resume.pdf"
               className="inline-flex w-full justify-center rounded-full bg-accent px-7 py-3.5 text-xs font-semibold uppercase tracking-widest text-white shadow-xl transition-colors hover:bg-accent-2 active:scale-95 sm:w-auto"
             >
               Download Resume (PDF) ↓
