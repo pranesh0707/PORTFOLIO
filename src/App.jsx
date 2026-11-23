@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion, useScroll, useSpring } from "motion/react";
 
 /* =========================================================================
    DEVELOPER PROFILE DATA — PRANESH U S
@@ -498,6 +499,12 @@ function InteractionGlow() {
   );
 }
 
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 160, damping: 28, restDelta: 0.001 });
+  return <motion.div className="fixed left-0 top-0 z-[70] h-[2px] w-full origin-left bg-accent" style={{ scaleX }} />;
+}
+
 /* =========================================================================
    MAIN APP
 ========================================================================= */
@@ -519,6 +526,7 @@ export default function App() {
 
   return (
     <div className={isDark ? "dark" : ""}>
+      <ScrollProgress />
       <InteractionGlow />
       <div
         className={`relative min-h-screen overflow-x-hidden font-sans antialiased transition-colors duration-300 ${
@@ -527,7 +535,13 @@ export default function App() {
       >
         {/* Project Detail Modal */}
         {selectedProject && (
-          <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl text-[#f3f1ea] overflow-y-auto antialiased">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl text-[#f3f1ea] overflow-y-auto antialiased"
+          >
             <header className="sticky top-0 z-50 bg-[#08080a]/90 backdrop-blur border-b border-white/10 px-6 sm:px-12 py-5 flex items-center justify-between">
               <button
                 onClick={() => setSelectedProject(null)}
@@ -629,59 +643,71 @@ export default function App() {
                 </div>
               </div>
             </section>
-          </div>
+          </motion.div>
         )}
 
         {/* NAVIGATION */}
         <header className="fixed inset-x-0 top-0 z-40 pointer-events-none">
           <nav
-            className={`pointer-events-auto flex items-center justify-between px-6 sm:px-12 py-5 text-[#111114] dark:text-[#f3f1ea] backdrop-blur-md border-b transition-colors ${
-              isDark ? "bg-[#08080a]/80 border-white/10" : "bg-white/80 border-slate-200"
+            className={`pointer-events-auto flex h-[72px] items-center justify-between px-4 sm:px-7 text-[#111114] dark:text-[#f3f1ea] backdrop-blur-xl border-b transition-colors ${
+              isDark ? "bg-[#08080a]/75 border-white/10" : "bg-white/75 border-slate-200"
             }`}
           >
-            <a href="#top" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-full border border-accent grid place-items-center font-semibold text-xs tracking-tight bg-white dark:bg-zinc-900 group-hover:bg-accent group-hover:text-white transition-colors">
-                {PROFILE.monogram}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-bold uppercase tracking-[0.2em]">{PROFILE.name}</span>
-                <span className="text-[0.625rem] font-mono uppercase tracking-widest text-slate-600 dark:text-[#f3f1ea]/60">3rd Year CSBS · SKCET (8.21 CGPA)</span>
-              </div>
+            <a href="#top" className="group flex items-center gap-3">
+              <motion.div
+                whileHover={{ rotate: 8, scale: 1.05 }}
+                className="grid h-10 w-10 place-items-center rounded-full border border-accent/70 bg-accent/10 font-mono text-xs font-bold text-accent shadow-[0_0_28px_rgba(255,59,29,0.12)]"
+              >
+                &lt;/&gt;
+              </motion.div>
+              <span className="font-mono text-sm font-semibold lowercase tracking-[0.12em]">{PROFILE.name.split(" ")[0].toLowerCase()}</span>
             </a>
 
-            <ul className="hidden lg:flex items-center gap-8">
-              {["Home", "Stack", "Experience", "Projects", "Contact"].map((item) => (
-                <li key={item}>
-                  <a
-                    href={item === "Home" ? "#top" : `#${item.toLowerCase()}`}
-                    className="relative text-[0.8125rem] font-medium uppercase tracking-[0.18em] text-slate-700 dark:text-[#f3f1ea]/70 hover:text-accent transition-colors py-1 group"
-                  >
-                    {item}
-                    <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-full" />
-                  </a>
-                </li>
+            <div className="absolute left-1/2 hidden -translate-x-1/2 items-center rounded-full border border-white/10 bg-white/[0.03] p-1 lg:flex">
+              {[
+                ["developer", "top"],
+                ["stack", "stack"],
+                ["experience", "experience"],
+                ["projects", "projects"],
+              ].map(([label, id], index) => (
+                <motion.a
+                  key={id}
+                  href={`#${id}`}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.05 }}
+                  className={`rounded-full px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-colors ${
+                    index === 0
+                      ? "bg-white text-[#111114] shadow-lg dark:bg-[#f3f1ea]"
+                      : "text-slate-500 hover:text-accent dark:text-[#f3f1ea]/55"
+                  }`}
+                >
+                  {label}
+                </motion.a>
               ))}
-            </ul>
+            </div>
 
-            <div className="flex items-center gap-3">
-              <button
+            <div className="flex items-center gap-2">
+              <motion.button
+                whileTap={{ scale: 0.88 }}
                 onClick={() => setIsDark(!isDark)}
-                className={`w-10 h-10 rounded-full border flex items-center justify-center text-sm transition-all cursor-pointer active:scale-95 ${
-                  isDark ? "border-zinc-700 bg-zinc-900 hover:border-accent" : "border-slate-300 bg-white hover:border-accent"
+                className={`grid h-10 w-10 place-items-center rounded-full border text-sm transition-colors ${
+                  isDark ? "border-white/10 bg-white/[0.04] hover:border-accent" : "border-slate-300 bg-white hover:border-accent"
                 }`}
                 aria-label="Toggle Color Theme"
               >
-                {isDark ? "☀️" : "🌙"}
-              </button>
+                {isDark ? "◐" : "☀"}
+              </motion.button>
 
-              <a
+              <motion.a
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.96 }}
                 href={PROFILE.resumePdf}
                 download="Pranesh_U_S_Resume.pdf"
-                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent bg-accent/10 hover:bg-accent text-accent hover:text-white text-xs font-semibold uppercase tracking-widest transition-all duration-300 active:scale-95"
+                className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] transition-colors hover:border-accent hover:text-accent sm:inline-flex"
               >
-                Resume PDF ↓
-              </a>
-
+                <span aria-hidden="true">▰</span> Résumé
+              </motion.a>
             </div>
           </nav>
         </header>
@@ -690,7 +716,7 @@ export default function App() {
         {/* HERO SECTION: REGGIE PERRY JR. REFERENCE LAYOUT (RED NAME BEHIND, AVATAR IN FRONT) */}
         <section id="top" className="relative flex min-h-screen flex-col justify-between overflow-hidden px-6 pt-28 sm:px-12 sm:pt-36">
           <div className="relative z-30 flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
-            <div>
+            <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
               <div className="inline-flex items-center gap-3 font-mono text-[0.8125rem] font-medium uppercase tracking-[0.22em] text-[#ff3b1d]">
                 <span className="size-2.5 animate-ping rounded-full bg-[#ff3b1d]" />
                 {PROFILE.college?.split("(")[0]}
@@ -700,16 +726,21 @@ export default function App() {
                   <span key={r} className="block">{r}</span>
                 ))}
               </h2>
-            </div>
-            <div className="flex flex-col items-start gap-3 sm:items-end">
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }} className="flex flex-col items-start gap-3 sm:items-end">
               <p className="max-w-md text-sm leading-relaxed text-slate-700 dark:text-[#f3f1ea]/75 sm:text-right sm:text-base">
                 {PROFILE.bio}
               </p>
-            </div>
+            </motion.div>
           </div>
 
           {/* REGGIE PERRY COMPOSITION: NAME DROPS BEHIND (Z-10), AVATAR IN FRONT (Z-20) */}
-          <div className="relative mt-4 flex min-h-[500px] flex-1 items-end justify-center pb-4 sm:min-h-[540px]">
+          <motion.div
+            initial={{ opacity: 0, y: 36, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mt-4 flex min-h-[500px] flex-1 items-end justify-center pb-4 sm:min-h-[540px]"
+          >
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10">
               <RedDroppingName text={PROFILE.name.toUpperCase()} />
             </div>
@@ -722,7 +753,7 @@ export default function App() {
                 size="w-[280px] h-[360px] sm:w-[360px] sm:h-[460px]"
               />
             </div>
-          </div>
+          </motion.div>
 
         </section>
 
@@ -825,8 +856,13 @@ export default function App() {
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
             {PROJECTS.map((proj, idx) => (
-              <article
+              <motion.article
                 key={proj.name}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -8 }}
+                viewport={{ once: true, amount: 0.18 }}
+                transition={{ duration: 0.7, delay: (idx % 2) * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 className={`group flex flex-col justify-between p-7 rounded-3xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#151519] hover:border-accent transition-all duration-500 shadow-[0_18px_45px_rgba(15,23,42,0.08)] dark:shadow-[0_18px_45px_rgba(0,0,0,0.32)] ${
                   idx % 2 === 1 ? "md:mt-16" : ""
                 }`}
@@ -872,7 +908,7 @@ export default function App() {
                     Deep Dive System ↗
                   </button>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </section>
