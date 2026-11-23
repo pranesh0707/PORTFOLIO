@@ -149,13 +149,13 @@ const PROJECTS = [
     }
   },
   {
-    id: "instaauth",
-    name: "InstaAuth",
+    id: "authnexus",
+    name: "AuthNexus",
     category: "Production Authentication Backend",
     year: "2025 – 2026",
     outcome: "Production-Grade Security",
-    githubUrl: "https://github.com/pranesh0707/InstaAuth",
-    summary: "Scalable authentication backend with JWT login, refresh-token rotation, Redis-backed token blacklisting, OTP email verification, and enterprise security controls.",
+    githubUrl: "https://github.com/pranesh0707/AuthNexus",
+    summary: "Scalable authentication backend with JWT login, refresh-token rotation, Redis-backed token blacklisting, OTP verification, and enterprise security controls.",
     tags: ["Java 21", "Spring Boot 4", "Spring Security 7", "PostgreSQL", "Redis", "Bucket4j"],
     highlights: ["JWT Rotation", "OTP Verification", "Rate Limiting", "Account Lockout", "Dockerized Stack", "Flyway Migrations"],
     deepDive: {
@@ -165,6 +165,66 @@ const PROJECTS = [
         "Redis-backed token blacklist and refresh-token rotation for immediate revocation and session safety.",
         "Bucket4j per-IP rate limiting and automated account lockout to protect login and recovery endpoints.",
         "Dockerized PostgreSQL, Redis, and MailHog stack with Flyway migrations for environment parity."
+      ],
+    }
+  },
+  {
+    id: "audio-transcriber-ai",
+    name: "Audio Transcriber AI",
+    category: "Full-Stack AI & Speech Processing",
+    year: "2026",
+    outcome: "AI Speech-to-Text Platform",
+    githubUrl: "https://github.com/pranesh0707/SPRING_AI_AUDIO_TRANSCRIBER",
+    summary: "Full-stack speech-to-text application for uploading or recording audio, then generating accurate AI transcripts through a Spring Boot gateway and Flask Whisper service.",
+    tags: ["React", "Vite", "Axios", "Java", "Spring Boot", "Flask", "faster-whisper", "MediaRecorder"],
+    highlights: ["Voice Recording", "Multi-Language", "Whisper Small", "VAD Filtering", "Gateway Proxy", "Animated Transcript"],
+    deepDive: {
+      problem: "Direct browser uploads require a secure, consistent way to process varied audio formats while keeping the transcription engine internal and exposing accurate results quickly.",
+      solution: "Built a three-tier pipeline where React captures and uploads audio, Spring Boot repackages and proxies multipart requests, and a Flask faster-whisper service transcribes the original file format with tuned decoding parameters.",
+      architecture: [
+        "React Vite frontend using Axios and the native MediaRecorder API for file uploads and browser voice recording.",
+        "Spring Boot RestTemplate gateway exposing POST /api/transcribe and forwarding multipart audio plus language hints internally.",
+        "Flask faster-whisper engine using beam search, VAD filtering, deterministic temperature, and original file extensions."
+      ],
+    }
+  },
+  {
+    id: "movie-explorer",
+    name: "Movie Explorer App",
+    category: "React State Management",
+    year: "2025",
+    outcome: "Context API Learning Platform",
+    githubUrl: "https://github.com/pranesh0707/MOVIE_PRO_REACT_CONTEXT_API",
+    summary: "Responsive movie browsing application using the OMDb API, React Context API, custom state hooks, and localStorage-backed favorites.",
+    tags: ["React", "Vite", "Context API", "JavaScript", "OMDb API", "localStorage"],
+    highlights: ["Global State", "Favorites", "Persistent Storage", "OMDb Search", "Custom Hook", "Responsive UI"],
+    deepDive: {
+      problem: "Movie search and favorites need to remain synchronized across unrelated components without prop drilling or losing user preferences between visits.",
+      solution: "Centralized favorites and movie operations in a React Context provider, exposed them through a custom useMovieContext hook, and synchronized state with localStorage.",
+      architecture: [
+        "MovieContext provider for centralized favorites and shared application state.",
+        "Immutable addFavor and removeFavor operations with stable imdbID keys and derived favorite checks.",
+        "OMDb API search integration with localStorage hydration and persistence effects for responsive state."
+      ],
+    }
+  },
+  {
+    id: "g-shop",
+    name: "G-Shop",
+    category: "React E-Commerce Interface",
+    year: "2025",
+    outcome: "Modern Shopping Experience",
+    githubUrl: "https://github.com/pranesh0707/G-SHOP",
+    summary: "Responsive React and Vite shopping interface built with Tailwind CSS, reusable components, and polished product browsing interactions.",
+    tags: ["React", "Vite", "JavaScript", "Tailwind CSS", "ESLint", "PostCSS"],
+    highlights: ["Responsive Layout", "Reusable Components", "Vite", "Tailwind UI", "ESLint", "Shopping Experience"],
+    deepDive: {
+      problem: "A modern storefront interface needs reusable presentation components, responsive layouts, and a lightweight development setup that stays easy to extend.",
+      solution: "Created a React shop experience with Vite tooling, Tailwind/PostCSS styling, reusable UI components, and a clean responsive page structure.",
+      architecture: [
+        "Vite-powered React application with component-based feature organization.",
+        "Tailwind CSS and PostCSS utility styling for a consistent responsive interface.",
+        "ESLint configuration supporting maintainable JavaScript development."
       ],
     }
   }
@@ -506,6 +566,17 @@ export default function App() {
                   ))}
                 </div>
 
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2.5 py-1 text-[0.625rem] font-mono uppercase tracking-wider rounded-md border border-slate-300 text-slate-600 dark:border-zinc-700 dark:text-[#f3f1ea]/60"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
                 <div className="space-y-6">
                   <div className="p-6 rounded-2xl border border-white/10 bg-[#111116]">
                     <h3 className="font-sans text-xs font-bold text-accent uppercase tracking-wider">
@@ -749,7 +820,7 @@ export default function App() {
                 Selected Systems.
               </h2>
             </div>
-            <span className="text-[0.8125rem] uppercase tracking-[0.22em] font-mono text-slate-600 dark:text-[#f3f1ea]/60">04 / Production Architectures</span>
+            <span className="text-[0.8125rem] uppercase tracking-[0.22em] font-mono text-slate-600 dark:text-[#f3f1ea]/60">06 / Production Architectures</span>
           </div>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
@@ -773,6 +844,13 @@ export default function App() {
                     {proj.highlights.map((h) => (
                       <span key={h} className="px-3 py-1 text-[0.6875rem] font-mono font-semibold uppercase tracking-wider rounded-lg bg-[#111114] border border-[#111114] text-white">
                         ⚡ {h}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {proj.tags.map((tag) => (
+                      <span key={tag} className="px-2.5 py-1 text-[0.625rem] font-mono uppercase tracking-wider rounded-md border border-slate-300 text-slate-600 dark:border-zinc-700 dark:text-[#f3f1ea]/60">
+                        {tag}
                       </span>
                     ))}
                   </div>
